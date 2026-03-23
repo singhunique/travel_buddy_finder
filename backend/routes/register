@@ -1,0 +1,11 @@
+const mongoose = require('mongoose');
+
+const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }, // This will be hashed
+  interests: [{ type: String }], // Array of interests: ['Hiking', 'Food', 'Art']
+  bio: { type: String, maxLength: 200 }
+});
+
+module.exports = mongoose.model('User', UserSchema);

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Travel Buddy Finder</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<div class="page-bg"></div>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">✈</div>
+
+    <div>
+      <h1>Travel Buddy Finder</h1>
+      <p>Find travel companions with shared destinations and dates.</p>
+    </div>
+  </div>
+
+  <nav class="top-actions">
+    <button id="logoutBtn" class="btn btn-outline hidden">
+      Logout
+    </button>
+  </nav>
+</header>
+
+<main class="main-shell">
+
+<!-- AUTH SECTION -->
+
+<section id="authSection">
+
+  <div class="hero-card">
+
+    <div class="hero-copy">
+
+      <span class="badge">
+        Smart Travel Matching
+      </span>
+
+      <h2>
+        Turn solo trips into shared adventures.
+      </h2>
+
+      <p>
+        Post your trip, discover travelers going to the same destination,
+        and connect instantly through secure messaging.
+      </p>
+
+      <div class="hero-stats">
+
+        <div class="stat-box">
+          <strong>Secure</strong>
+          <span>JWT authentication</span>
+        </div>
+
+        <div class="stat-box">
+          <strong>Smart</strong>
+          <span>Date matching</span>
+        </div>
+
+        <div class="stat-box">
+          <strong>Fast</strong>
+          <span>Real-time chat</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="auth-layout">
+
+<!-- REGISTER -->
+
+<section class="panel auth-panel">
+
+  <div class="panel-head">
+    <h3>Create Account</h3>
+    <p>Register to start finding travel buddies.</p>
+  </div>
+
+  <form id="registerForm" class="form-grid">
+
+    <div class="input-group">
+      <label>Full Name</label>
+      <input
+        type="text"
+        id="registerName"
+        placeholder="Your full name"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Email Address</label>
+      <input
+        type="email"
+        id="registerEmail"
+        placeholder="example@email.com"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input
+        type="password"
+        id="registerPassword"
+        placeholder="Create password"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Interests</label>
+      <input
+        type="text"
+        id="registerInterests"
+        placeholder="Hiking, Food, Photography"
+      />
+    </div>
+
+    <button class="btn btn-primary btn-full">
+      Register
+    </button>
+
+  </form>
+
+</section>
+
+<!-- LOGIN -->
+
+<section class="panel auth-panel">
+
+  <div class="panel-head">
+    <h3>Login</h3>
+    <p>Access your dashboard.</p>
+  </div>
+
+  <form id="loginForm" class="form-grid">
+
+    <div class="input-group">
+      <label>Email Address</label>
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Enter email"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Enter password"
+        required
+      />
+    </div>
+
+    <button class="btn btn-primary btn-full">
+      Login
+    </button>
+
+    <button
+      type="button"
+      id="forgotPasswordBtn"
+      class="btn btn-soft btn-full"
+    >
+      Forgot Password?
+    </button>
+
+  </form>
+
+</section>
+
+  </div>
+
+</section>
+
+<!-- DASHBOARD -->
+
+<section id="dashboardSection" class="hidden">
+
+<div class="dashboard-top">
+
+  <div>
+
+    <p class="eyebrow">
+      Dashboard
+    </p>
+
+    <h2 id="welcomeText">
+      Welcome
+    </h2>
+
+    <p class="muted">
+      Manage your trips and find matches.
+    </p>
+
+  </div>
+
+  <div class="dashboard-summary">
+
+    <div class="summary-card">
+      <span>Trips</span>
+      <strong id="tripCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Matches</span>
+      <strong id="matchCount">0</strong>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="dashboard-grid">
+
+<!-- ADD TRIP -->
+
+<section class="panel">
+
+  <div class="panel-head">
+    <h3>Add New Trip</h3>
+  </div>
+
+  <form id="tripForm" class="form-grid">
+
+    <div class="input-group">
+      <label>Destination</label>
+      <input
+        type="text"
+        id="destination"
+        placeholder="Paris"
+        required
+      />
+    </div>
+
+    <div class="date-grid">
+
+      <div class="input-group">
+        <label>Start Date</label>
+        <input
+          type="date"
+          id="startDate"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label>End Date</label>
+        <input
+          type="date"
+          id="endDate"
+          required
+        />
+      </div>
+
+    </div>
+
+    <button class="btn btn-primary btn-full">
+      Add Trip
+    </button>
+
+  </form>
+
+</section>
+
+<!-- MY TRIPS -->
+
+<section class="panel">
+
+  <div class="panel-head row">
+    <h3>My Trips</h3>
+
+    <button
+      id="refreshTripsBtn"
+      class="btn btn-soft"
+    >
+      Refresh
+    </button>
+  </div>
+
+  <div id="myTripsList"></div>
+
+</section>
+
+</div>
+
+<!-- MATCHES -->
+
+<section class="panel matches-panel">
+
+  <div class="panel-head row">
+
+    <h3>
+      Travel Buddy Matches
+    </h3>
+
+    <button
+      id="refreshMatchesBtn"
+      class="btn btn-soft"
+    >
+      Refresh Matches
+    </button>
+
+  </div>
+
+  <div id="matchesList" class="cards-grid"></div>
+
+</section>
+
+</section>
+
+</main>
+
+<!-- FORGOT PASSWORD MODAL -->
+
+<div id="forgotPasswordModal" class="chat-modal hidden">
+
+  <div class="chat-box">
+
+    <div class="chat-header">
+
+      <div>
+        <h3>Forgot Password</h3>
+        <p>Enter your email to reset password</p>
+      </div>
+
+      <button
+        id="closeForgotPasswordBtn"
+        class="btn btn-soft"
+      >
+        Close
+      </button>
+
+    </div>
+
+    <form id="forgotPasswordForm" class="form-grid">
+
+      <div class="input-group">
+        <label>Email</label>
+        <input
+          type="email"
+          id="forgotPasswordEmail"
+          required
+        />
+      </div>
+
+      <button class="btn btn-primary btn-full">
+        Send Reset Link
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- CHAT MODAL -->
+
+<div id="chatModal" class="chat-modal hidden">
+
+  <div class="chat-box">
+
+    <div class="chat-header">
+
+      <div>
+        <h3 id="chatTitle">Chat</h3>
+        <p>Connect with your travel buddy</p>
+      </div>
+
+      <button
+        id="closeChatBtn"
+        class="btn btn-soft"
+      >
+        Close
+      </button>
+
+    </div>
+
+    <div
+      id="chatMessages"
+      class="chat-messages"
+    ></div>
+
+    <form
+      id="chatForm"
+      class="chat-form"
+    >
+
+      <input
+        type="text"
+        id="chatInput"
+        placeholder="Type message..."
+        required
+      />
+
+      <button class="btn btn-primary">
+        Send
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- TOAST -->
+
+<div
+  id="toast"
+  class="toast hidden"
+></div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+const express = require("express");
+const User = require("../models/User");
+const Trip = require("../models/Trip");
+const Chat = require("../models/Chat");
+const Message = require("../models/Message");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
+
+const router = express.Router();
+
+// Dashboard stats
+router.get("/stats", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalTrips = await Trip.countDocuments();
+    const totalChats = await Chat.countDocuments();
+    const totalMessages = await Message.countDocuments();
+
+    res.json({
+      totalUsers,
+      totalTrips,
+      totalChats,
+      totalMessages
+    });
+  } catch (error) {
+    console.error("Admin stats error:", error);
+    res.status(500).json({ message: "Server error while fetching admin stats" });
+  }
+});
+
+// Get all users
+router.get("/users", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const users = await User.find().select("-password").sort({ createdAt: -1 });
+    res.json(users);
+  } catch (error) {
+    console.error("Admin get users error:", error);
+    res.status(500).json({ message: "Server error while fetching users" });
+  }
+});
+
+// Get all trips
+router.get("/trips", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const trips = await Trip.find()
+      .populate("user", "name email")
+      .sort({ createdAt: -1 });
+
+    res.json(trips);
+  } catch (error) {
+    console.error("Admin get trips error:", error);
+    res.status(500).json({ message: "Server error while fetching trips" });
+  }
+});
+
+// Delete user
+router.delete("/users/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Admin delete user error:", error);
+    res.status(500).json({ message: "Server error while deleting user" });
+  }
+});
+
+module.exports = router;
