@@ -318,7 +318,12 @@ function validateLoginPassword() {
   return true;
 }
 function renderTrips(trips) {
-  if (!Array.isArray(trips) || trips.length === 0) {
+  if (!Array.isArray(trips)) {
+    console.error("Trips is not an array:", trips);
+    return;
+  }
+
+  if (trips.length === 0) {
     renderEmptyState(
       myTripsList,
       "No trips yet",
@@ -329,25 +334,29 @@ function renderTrips(trips) {
   }
 
   myTripsList.innerHTML = trips
-    .map(
-      (trip) => `
+    .map((trip) => {
+      const destination = escapeHtml(trip.destination || "Unknown");
+      const start = trip.startDate ? formatDate(trip.startDate) : "N/A";
+      const end = trip.endDate ? formatDate(trip.endDate) : "N/A";
+
+      return `
         <article class="trip-card">
           <div class="trip-card-top">
-            <h4 class="trip-title">${escapeHtml(trip.destination)}</h4>
+            <h4 class="trip-title">${destination}</h4>
             <span class="pill">Active Trip</span>
           </div>
 
           <div class="meta">
-            <div class="meta-block"><strong>From:</strong> ${formatDate(trip.startDate)}</div>
-            <div class="meta-block"><strong>To:</strong> ${formatDate(trip.endDate)}</div>
+            <div class="meta-block"><strong>From:</strong> ${start}</div>
+            <div class="meta-block"><strong>To:</strong> ${end}</div>
           </div>
 
           <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
             <button class="btn btn-soft edit-btn"
               data-id="${trip._id}"
-              data-destination="${encodeURIComponent(trip.destination)}"
-              data-start="${trip.startDate.split("T")[0]}"
-              data-end="${trip.endDate.split("T")[0]}">
+              data-destination="${encodeURIComponent(trip.destination || "")}"
+              data-start="${trip.startDate?.split("T")[0] || ""}"
+              data-end="${trip.endDate?.split("T")[0] || ""}">
               Edit
             </button>
 
@@ -357,10 +366,11 @@ function renderTrips(trips) {
             </button>
           </div>
         </article>
-      `
-    )
+      `;
+    })
     .join("");
 
+  setCounts(trips.length, Number(matchCount?.textContent || 0));
   attachTripListeners();
 }
 
