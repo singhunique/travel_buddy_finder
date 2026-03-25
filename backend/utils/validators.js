@@ -61,3 +61,4 @@ module.exports = {
   isValidDestination,
   isValidDateRange
 };
+

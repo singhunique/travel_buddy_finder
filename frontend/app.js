@@ -317,7 +317,6 @@ function validateLoginPassword() {
   clearFieldError(loginPassword);
   return true;
 }
-
 function renderTrips(trips) {
   if (!Array.isArray(trips) || trips.length === 0) {
     renderEmptyState(
@@ -344,17 +343,47 @@ function renderTrips(trips) {
           </div>
 
           <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn btn-soft" onclick="editTrip('${trip._id}', '${encodeURIComponent(trip.destination)}', '${trip.startDate.split("T")[0]}', '${trip.endDate.split("T")[0]}')">Edit</button>
-            <button class="btn btn-soft" onclick="deleteTrip('${trip._id}')">Delete</button>
+            <button class="btn btn-soft edit-btn"
+              data-id="${trip._id}"
+              data-destination="${encodeURIComponent(trip.destination)}"
+              data-start="${trip.startDate.split("T")[0]}"
+              data-end="${trip.endDate.split("T")[0]}">
+              Edit
+            </button>
+
+            <button class="btn btn-soft delete-btn"
+              data-id="${trip._id}">
+              Delete
+            </button>
           </div>
         </article>
       `
     )
     .join("");
 
-  setCounts(trips.length, Number(matchCount?.textContent || 0));
+  attachTripListeners();
 }
 
+function attachTripListeners() {
+  // DELETE
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      deleteTrip(btn.dataset.id);
+    });
+  });
+
+  // EDIT
+  document.querySelectorAll(".edit-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      editTrip(
+        btn.dataset.id,
+        btn.dataset.destination,
+        btn.dataset.start,
+        btn.dataset.end
+      );
+    });
+  });
+}
 function renderMatches(matches) {
   if (!Array.isArray(matches) || matches.length === 0) {
     renderEmptyState(
@@ -775,8 +804,7 @@ logoutBtn?.addEventListener("click", async () => {
   showToast("Logged out successfully.");
 });
 
-window.deleteTrip = deleteTrip;
-window.editTrip = editTrip;
+
 window.openChat = openChat;
 
 updatePasswordHint();
